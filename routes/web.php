@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Home
+Route::get("/", "HomeController@index")->name("index");
+Route::get('/home', 'HomeController@index')->name('home');
+
+// User Authentication
+Auth::routes();
+
+// Admin
+Route::resource("admin", "AdminController");
+
+// Company
+Route::resource("company", "CompanyController");
