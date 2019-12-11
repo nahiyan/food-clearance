@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Food;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home.index');
+        $foods = Food::all();
+
+        foreach($foods as $food) {
+            $food->expires_at = (new Carbon($food->expires_at))->diffForHumans();
+        }
+
+        return view('home.index')->with("foods", $foods);
     }
 }
