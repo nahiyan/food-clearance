@@ -1,4 +1,11 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);#content {
+@import url(https://fonts.googleapis.com/css?family=Nunito);html {
+  background-color: #F0F0F0;
+}
+
+#content {
   margin-top: 1em;
+  background: white;
+  padding: 1.5em;
+  border-radius: 5px;
 }
 
