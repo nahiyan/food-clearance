@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="css/app.css">
     </head>
     <body>
-        <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+        <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
             <div class="container">
                 <div class="navbar-brand">
                     <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
@@ -39,6 +39,13 @@
                         <div class="navbar-item">
                             <input type="text" class="input" placeholder="Search">
                         </div>
+                        
+                        @if(Auth::check())
+                            <div class="navbar-item">
+                                Hello {{ Auth::user()->name }}
+                            </div>
+                        @endif
+                        
                         <div class="navbar-item">
                             <div class="buttons">
                                 @if(!Auth::check())
