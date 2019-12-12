@@ -37,7 +37,7 @@
                 
                     <div class="navbar-end">
                         <div class="navbar-item">
-                            <input type="text" class="input" placeholder="Search">
+                            <input type="text" id="search" class="input" placeholder="Search">
                         </div>
                         
                         @if(Auth::check())

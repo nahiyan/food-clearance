@@ -23,3 +23,6 @@ Route::resource("admin", "AdminController");
 
 // Company
 Route::resource("company", "CompanyController");
+
+// Search
+Route::get("search/{query}", "SearchController@index");

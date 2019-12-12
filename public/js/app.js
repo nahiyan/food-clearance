@@ -37040,6 +37040,39 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+document.getElementById("search").addEventListener("input", function (e) {
+  var value = e.target.value.trim();
+
+  if (value.length > 0) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("search-results").classList.remove("hidden");
+        document.getElementById("results").classList.add("hidden");
+        var foods = JSON.parse(this.responseText);
+        var sr = document.getElementById("search-results");
+        var cols = document.createElement("div");
+        cols.setAttribute("class", "columns is-multiline");
+        cols.innerHTML = "";
+
+        for (i = 0; i < foods.length; i++) {
+          var food = foods[i];
+          cols.innerHTML += "<div class=\"column is-one-quarter\">\n                            <div class=\"card\">\n                                <div class=\"card-image\">\n                                    <figure class=\"image is-4by3\">\n                                        <img src=\"images/".concat(food.image_name, "\">\n                                    </figure>\n                                </div>\n                                <div class=\"card-content\">\n                                    <div class=\"media\">\n                                        <div class=\"media-content\">\n                                            <p class=\"title is-4\">").concat(food.name, "</p>\n                                            <p class=\"subtitle is-6\">Expires ").concat(food.expires_at, ".</p>\n                                            <p class=\"subtitle is-6\">Manufactured by <a href=\"#\">").concat(food.company_name, "</a>.</p>\n                                        </div>\n                                    </div>\n                                </div>\n                                <footer class=\"card-footer\">\n                                    <a href=\"#\" class=\"card-footer-item\">Buy</a>\n                                </footer>\n                            </div>\n                        </div>\n                        ");
+        }
+
+        sr.appendChild(cols);
+      }
+    };
+
+    xhr.open("GET", "search/" + value, true);
+    xhr.send();
+  } else {
+    document.getElementById("search-results").classList.add("hidden");
+    document.getElementById("results").classList.remove("hidden");
+    document.getElementById("search-results").innerHTML = "<i>No food items found!</i>";
+  }
+});
 
 /***/ }),
 
