@@ -37052,6 +37052,7 @@ document.getElementById("search").addEventListener("input", function (e) {
         document.getElementById("results").classList.add("hidden");
         var foods = JSON.parse(this.responseText);
         var sr = document.getElementById("search-results");
+        sr.innerHTML = "";
         var cols = document.createElement("div");
         cols.setAttribute("class", "columns is-multiline");
         cols.innerHTML = "";

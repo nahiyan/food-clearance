@@ -36,6 +36,7 @@ document.getElementById("search").addEventListener("input", function (e) {
 
                 let foods = JSON.parse(this.responseText);
                 let sr = document.getElementById("search-results");
+                sr.innerHTML = "";
 
                 let cols = document.createElement("div");
                 cols.setAttribute("class", "columns is-multiline");
