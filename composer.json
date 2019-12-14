@@ -12,7 +12,8 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
-        "nesbot/carbon": "^2.27"
+        "nesbot/carbon": "^2.27",
+        "salmanzafar/laravel-crud-generator": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
