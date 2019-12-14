@@ -1,9 +1,14 @@
 @extends("layouts.admin")
 
+@section("stylesheets")
+    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+    @parent
+@endsection
+
 @section("content")
     <h1 class="title">Edit</h1>
 
-    <form method="POST" action="{{ route("users.update", $entry) }}">
+    <form method="POST" action="{{ route("foods.update", $entry) }}" enctype="multipart/form-data">
         @csrf
         @method("PUT")
 
@@ -11,7 +16,7 @@
             <label for="name" class="label">{{ __('Name') }}</label>
 
             <div>
-            <input id="name" type="text" class="input" name="name" value="{{ $entry->name }}" required autocomplete="name" autofocus>
+            <input id="name" type="text" class="input" name="name" value="{{ $entry->name }}" required autofocus>
 
                 @error('name')
                     <span class="invalid-feedback" role="alert">
@@ -22,12 +27,26 @@
         </div>
 
         <div class="field">
-            <label for="email" class="label">{{ __('E-Mail Address') }}</label>
+            <label for="price" class="label">{{ __('Price') }}</label>
 
             <div>
-                <input id="email" type="email" class="input" name="email" value="{{ $entry->email }}" required autocomplete="email">
+                <input type="number" class="input" value="{{ $entry->price }}" name="price" required>
 
-                @error('email')
+                @error('price')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+        </div>
+        
+        <div class="field">
+            <label for="quantity" class="label">{{ __('Quantity') }}</label>
+
+            <div>
+                <input type="number" class="input" value="{{ $entry->quantity }}" name="quantity" required>
+
+                @error('quantity')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -36,55 +55,109 @@
         </div>
 
         <div class="field">
-            <label for="password" class="label">{{ __('Password') }}</label>
+            <label for="expires_at" class="label">{{ __('Expires At') }}</label>
 
-            <div>
-                <input id="password" type="password" class="input" name="password" autocomplete="new-password">
+            <div id="datepicker" class="container">
+                <section>
+                    <b-field>
+                        <b-datepicker
+                            v-model="date"
+                            required
+                            name="expires_at"
+                            placeholder="Click to select..."
+                            icon="calendar-today">
+                        </b-datepicker>
+                    </b-field>
+                </section>
 
-                @error('password')
+                @error('expires_at')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>            
+        </div>
+
+        <div class="field">
+            <label for="image" class="label">{{ __('Image') }}</label>
+
+            <div id="image-upload">
+                <b-field class="file">
+                    <b-upload v-model="file" name="image">
+                        <a class="button is-outlined">
+                            <b-icon icon="upload"></b-icon>
+                            <span>Click to upload</span>
+                        </a>
+                    </b-upload>
+                    <span class="file-name" v-if="file">
+                        @{{ file.name }}
+                    </span>
+                </b-field>
+
+                @error('image')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>            
+        </div>
+        
+        <div class="field">
+            <label for="company_id" class="label">{{ __('Company') }}</label>
+
+            <div id="image-upload">
+                <div class="select">
+                    <select name="company_id">
+                        @foreach($companies as $company)
+                            <option value="{{ $company->id }}" {{ $entry->company->id == $company->id ? "selected" : "" }}>{{ $company->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                @error('company_id')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
             </div>
-        </div>
-
-        <div class="field">
-            <label for="password-confirm" class="label">{{ __('Confirm Password') }}</label>
-
-            <div>
-                <input id="password-confirm" type="password" class="input" name="password_confirmation" autocomplete="new-password">
-            </div>
-
-            @error('password_confirmation')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </div>
-
-        <div class="field">
-            <label for="type" class="label">{{ __('Type') }}</label>
-
-            <div class="select">
-                <select name="type">
-                    <option value="general" {{ $entry->type == "general" ? "selected" : "" }}>General</option>
-                    <option value="company" {{ $entry->type == "company" ? "selected" : "" }}>Company</option>
-                    <option value="admin" {{ $entry->type == "admin" ? "selected" : "" }}>Admin</option>
-                </select>
-            </div>
-
-            @error('type')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
         </div>
 
         <div class="field">
             <button type="submit" class="button is-outlined is-success">
-                {{ __('Save Changes') }}
+                {{ __('Update') }}
             </button>
         </div>
     </form>
+
+    {{-- VueJS --}}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    {{-- Buefy --}}
+    <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+
+    {{-- Vue Apps --}}
+    <script type="text/javascript">
+        // Date Picker
+        const datePickerData = {
+            data() {
+                return {
+                    date: new Date("{{ $entry->expires_at }}")
+                }
+            }
+        }
+        const datepicker = new Vue(datePickerData)
+        datepicker.$mount('#datepicker')
+        
+        // Image Upload
+        const imageUploadData = {
+            data() {
+                return {
+                    file: null
+                }
+            }
+        }
+
+        const imageUpload = new Vue(imageUploadData)
+        imageUpload.$mount('#image-upload')
+    </script>
 @endsection
