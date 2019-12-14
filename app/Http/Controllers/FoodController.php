@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Food;
 use Illuminate\Http\Request;
-use App\Company;
 
-class CompanyController extends Controller
+class FoodController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
-        return view("admin.companies.index")->with("companies", $companies);
+        $foods = Food::all();
+        return view("admin.foods.index")->with("foods", $foods);
     }
 
     /**
@@ -81,6 +81,8 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Food::destroy($id);
+
+        return redirect("admin/foods")->with("success", "Deletion success!");
     }
 }
