@@ -19,7 +19,7 @@
                 <th>Updated at</th>
                 <th>Actions</th>
             </tr>
-            @foreach($foods as $food)
+            @foreach($entries as $food)
                 <tr>
                     <td>{{ $food->id }}</td>
                     <td>

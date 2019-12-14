@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Food;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
@@ -14,8 +17,9 @@ class FoodController extends Controller
      */
     public function index()
     {
-        $foods = Food::all();
-        return view("admin.foods.index")->with("foods", $foods);
+        $entries = Food::orderBy("id", "desc")->get();
+
+        return view("admin.foods.index")->with("entries", $entries);
     }
 
     /**
@@ -25,7 +29,8 @@ class FoodController extends Controller
      */
     public function create()
     {
-        //
+        $companies = Company::all();
+        return view("admin.foods.create")->with("companies", $companies);
     }
 
     /**
@@ -36,53 +41,77 @@ class FoodController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:foods|max:255',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'expires_at' => 'required|date',
+            'image' => 'required|image',
+            'company_id' => 'required|numeric',
+        ]);
+
+        $path = $request->file('image')->store('public/images');
+        $company = Company::find($request->input("company_id"));
+
+        $request->merge(
+            [
+                "expires_at" => (new Carbon($request->input("expires_at")))->format("Y-m-d H:i:s"),
+                "image_name" => str_replace("public/images/", "", $path),
+                "company_id" => $company->id,
+            ]
+        );
+
+        $entry = Food::create($request->all());
+
+        return redirect("/admin/foods")->with("success", "Created successfully!");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Food $food)
     {
-        //
+        return view("admin.foods.show")->with("entry", $food);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Food $food)
     {
-        //
+        return view("admin.foods.edit")->with("entry", $food);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Food $food)
     {
-        //
+        $food->update($request->all());
+
+        return redirect("/admin/foods")->with("success", "Updated successfully!");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Food $food)
     {
-        Food::destroy($id);
+        $food->delete();
 
-        return redirect("admin/foods")->with("success", "Deletion success!");
+        return redirect("/admin/foods")->with("success", "Deleted successfully!");
     }
 }

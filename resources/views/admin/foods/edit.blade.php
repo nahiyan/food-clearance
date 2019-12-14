@@ -1,16 +1,17 @@
 @extends("layouts.admin")
 
 @section("content")
-    <h1 class="title">Create</h1>
+    <h1 class="title">Edit</h1>
 
-    <form method="POST" action="{{ route("users.store") }}">
+    <form method="POST" action="{{ route("users.update", $entry) }}">
         @csrf
+        @method("PUT")
 
         <div class="field">
             <label for="name" class="label">{{ __('Name') }}</label>
 
             <div>
-            <input id="name" type="text" class="input" name="name" value="{{ old("name") }}" required autocomplete="name" autofocus>
+            <input id="name" type="text" class="input" name="name" value="{{ $entry->name }}" required autocomplete="name" autofocus>
 
                 @error('name')
                     <span class="invalid-feedback" role="alert">
@@ -24,7 +25,7 @@
             <label for="email" class="label">{{ __('E-Mail Address') }}</label>
 
             <div>
-                <input id="email" type="email" class="input" value="{{ old("email") }}" name="email" required autocomplete="email">
+                <input id="email" type="email" class="input" name="email" value="{{ $entry->email }}" required autocomplete="email">
 
                 @error('email')
                     <span class="invalid-feedback" role="alert">
@@ -67,9 +68,9 @@
 
             <div class="select">
                 <select name="type">
-                    <option value="general">General</option>
-                    <option value="company">Company</option>
-                    <option value="admin">Admin</option>
+                    <option value="general" {{ $entry->type == "general" ? "selected" : "" }}>General</option>
+                    <option value="company" {{ $entry->type == "company" ? "selected" : "" }}>Company</option>
+                    <option value="admin" {{ $entry->type == "admin" ? "selected" : "" }}>Admin</option>
                 </select>
             </div>
 
@@ -82,7 +83,7 @@
 
         <div class="field">
             <button type="submit" class="button is-outlined is-success">
-                {{ __('Create') }}
+                {{ __('Save Changes') }}
             </button>
         </div>
     </form>
