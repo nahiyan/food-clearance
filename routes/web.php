@@ -19,10 +19,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 // Admin
-Route::resource("admin/users", "UserController");
-Route::resource("admin/companies", "CompanyController");
-Route::resource("admin/foods", "FoodController");
-Route::resource("admin", "AdminController");
+Route::group(['middleware' => ['auth.admin']], function () {
+    Route::resource("admin/users", "UserController");
+    Route::resource("admin/companies", "CompanyController");
+    Route::resource("admin/foods", "FoodController");
+    Route::resource("admin", "AdminController");
+});
 
 // Company
 Route::resource("company", "CompanyController");
