@@ -2,45 +2,92 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
 use App\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $users = User::latest()->get();
+        $entries = User::latest()->get();
 
-        // return response(['data' => $users ], 200);
-        return view("admin.users.index")->with("users", $users);
+        return view("admin.users.index")->with("entries", $entries);
     }
 
-    public function store(UserRequest $request)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $user = User::create($request->all());
-
-        return response(['data' => $user], 201);
+        return view("admin.users.create");
     }
 
-    public function show($id)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        $user = User::findOrFail($id);
+        $entry = User::create($request->all());
 
-        return response(['data', $user], 200);
+        return redirect("admin/users/")->with("success", "Created successfully!");
     }
 
-    public function update(UserRequest $request, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function show(User $user)
     {
-        $user = User::findOrFail($id);
+        return view("admin.users.show")->with("entry", $user);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $user)
+    {
+        return view("admin.users.edit")->with("entry", $user);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, User $user)
+    {
         $user->update($request->all());
 
-        return response(['data' => $user], 200);
+        return redirect("admin/users/")->with("success", "Updated successfully!");
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(User $user)
     {
-        User::destroy($id);
+        $user->delete();
 
-        return response(['data' => null], 204);
+        return redirect("admin/users/")->with("success", "Deleted successfully!");
     }
 }

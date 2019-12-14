@@ -15,7 +15,9 @@ class DummyClass extends Controller
      */
     public function index()
     {
-        //
+        $entries = DummyModelClass::latest()->get();
+
+        return view("index")->with("entries", $entries);
     }
 
     /**
@@ -25,7 +27,7 @@ class DummyClass extends Controller
      */
     public function create()
     {
-        //
+        return view("create");
     }
 
     /**
@@ -36,7 +38,9 @@ class DummyClass extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $entry = DummyModelClass::create($request->all());
+
+        return redirect("/")->with("success", "Created successfully!");
     }
 
     /**
@@ -47,7 +51,7 @@ class DummyClass extends Controller
      */
     public function show(DummyModelClass $DummyModelVariable)
     {
-        //
+        return view("show")->with("entry", $DummyModelVariable);
     }
 
     /**
@@ -58,7 +62,7 @@ class DummyClass extends Controller
      */
     public function edit(DummyModelClass $DummyModelVariable)
     {
-        //
+        return view("edit")->with("entry", $DummyModelVariable);
     }
 
     /**
@@ -70,7 +74,9 @@ class DummyClass extends Controller
      */
     public function update(Request $request, DummyModelClass $DummyModelVariable)
     {
-        //
+        $DummyModelVariable->update($request->all());
+
+        return redirect("/")->with("success", "Updated successfully!");
     }
 
     /**
@@ -81,6 +87,8 @@ class DummyClass extends Controller
      */
     public function destroy(DummyModelClass $DummyModelVariable)
     {
-        //
+        $DummyModelVariable->delete();
+
+        return redirect("/")->with("success", "Deleted successfully!");
     }
 }

@@ -18,19 +18,19 @@
                 <th>Updated at</th>
                 <th>Actions</th>
             </tr>
-            @foreach($users as $company)
+            @foreach($entries as $entry)
                 <tr>
-                    <td>{{ $company->id }}</td>
-                    <td>{{ $company->name }}</td>
-                    <td>{{ $company->email }}</td>
-                    <td>{{ $company->type }}</td>
-                    <td>{{ $company->created_at }}</td>
-                    <td>{{ $company->updated_at }}</td>
+                    <td>{{ $entry->id }}</td>
+                    <td>{{ $entry->name }}</td>
+                    <td>{{ $entry->email }}</td>
+                    <td>{{ $entry->type }}</td>
+                    <td>{{ $entry->created_at }}</td>
+                    <td>{{ $entry->updated_at }}</td>
                     <td>
-                        <form action="{{ url("admin/users/" . $company->id) }}" method="POST">
+                        <form action="{{ url("admin/users/" . $entry->id) }}" method="POST">
                             @method("DELETE")
                             @csrf
-                            <a class="button is-outlined" href="{{ url("admin/users/" . $company->id . "/edit") }}">Edit</a>
+                            <a class="button is-outlined" href="{{ url("admin/users/" . $entry->id . "/edit") }}">Edit</a>
                             <input type="submit" class="button is-outlined is-danger" }} value="Delete" onclick="return confirm('Are you sure?')"/>
                         </form>
                     </td>

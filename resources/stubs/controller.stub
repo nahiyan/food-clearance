@@ -14,7 +14,9 @@ class DummyClass extends Controller
      */
     public function index()
     {
-        // FUck me
+        $entries = DummyModelClass::latest()->get();
+
+        return response()->json($entries, 201);
     }
 
     /**
@@ -35,7 +37,9 @@ class DummyClass extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $entry = DummyModelClass::create($request->all());
+
+        return response()->json($entry, 201);
     }
 
     /**
@@ -46,7 +50,9 @@ class DummyClass extends Controller
      */
     public function show($id)
     {
-        //
+        $entry = DummyModelClass::findOrFail($id);
+
+        return response()->json($entry);
     }
 
     /**
@@ -69,7 +75,10 @@ class DummyClass extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $entry = DummyModelClass::findOrFail($id);
+        $entry->update($request->all());
+
+        return response()->json($entry, 200);
     }
 
     /**
@@ -80,6 +89,8 @@ class DummyClass extends Controller
      */
     public function destroy($id)
     {
-        //
+        DummyModelClass::destroy($id);
+
+        return response()->json(null, 204);
     }
 }
