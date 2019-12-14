@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class FoodsTableSeeder extends Seeder
 {
@@ -14,13 +14,14 @@ class FoodsTableSeeder extends Seeder
     {
         // array which will be used for the insertion
         $foods = [
-            
+
         ];
 
         for ($i = 0; $i <= 5; $i++) {
             $foods[] = [
                 'name' => Str::random(5),
                 'image_name' => 'test.jpg',
+                'price' => rand(1, 1000),
                 'quantity' => rand(1, 100),
                 'company_id' => rand(1, 5),
                 'expires_at' => Carbon::now()->add(rand(1, 10), "days")->format("Y-m-d H:i:s"),
