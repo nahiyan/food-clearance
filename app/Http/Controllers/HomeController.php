@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Food;
 use Carbon\Carbon;
 
@@ -25,9 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $foods = Food::all();
+        $foods = Food::orderBy("expires_at", "asc")->get();
 
-        foreach($foods as $food) {
+        foreach ($foods as $food) {
             $food->expires_at = (new Carbon($food->expires_at))->diffForHumans();
         }
 
