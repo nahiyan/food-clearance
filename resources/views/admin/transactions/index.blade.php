@@ -21,8 +21,8 @@
                 @foreach($entries as $transaction)
                     <tr>
                         <td>{{ $transaction->id }}</td>
+                        <td>{{ $transaction->user_name }}</td>
                         <td>{{ $transaction->food_name }}</td>
-                        <td>{{ $transaction->company_name }}</td>
                         <td>{{ $transaction->price }}</td>
                         <td>{{ $transaction->quantity }}</td>
                         <td>{{ Carbon\Carbon::parse($transaction->created_at)->diffForHumans() }}</td>

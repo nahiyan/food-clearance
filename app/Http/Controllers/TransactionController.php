@@ -21,13 +21,16 @@ class TransactionController extends Controller
             $entries = DB::table("transactions")
                 ->leftJoin("foods", "transactions.food_id", "=", "foods.id")
                 ->leftJoin("companies", "foods.company_id", "=", "companies.id")
+                ->leftJoin("users", "transactions.user_id", "=", "users.id")
                 ->where("companies.user_id", "=", Auth::user()->id)
-                ->select("transactions.*", "foods.name as food_name", "companies.name as company_name")
+                ->select("transactions.*", "users.name as user_name", "foods.name as food_name")
                 ->get();
-
-            error_log(json_encode($entries));
         } else {
-            $entries = Transaction::orderBy("id", "desc")->get();
+            $entries = DB::table("transactions")
+                ->leftJoin("foods", "transactions.food_id", "=", "foods.id")
+                ->leftJoin("users", "transactions.user_id", "=", "users.id")
+                ->select("transactions.*", "users.name as user_name", "foods.name as food_name")
+                ->get();
         }
 
         return view("admin.transactions.index", ["entries" => $entries, "type" => Auth::user()->type]);
