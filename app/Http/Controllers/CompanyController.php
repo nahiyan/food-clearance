@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -15,9 +16,13 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $entries = Company::orderBy("id", "desc")->get();
+        if (Auth::user()->type == "admin") {
+            $entries = Company::orderBy("id", "desc")->get();
+        } else {
+            $entries = Auth::user()->companies;
+        }
 
-        return view("admin.companies.index")->with("entries", $entries);
+        return view("admin.companies.index", ["entries" => $entries, "type" => Auth::user()->type]);
     }
 
     /**
@@ -28,7 +33,8 @@ class CompanyController extends Controller
     public function create()
     {
         $users = User::all();
-        return view("admin.companies.create")->with("users", $users);
+
+        return view("admin.companies.create", ["users" => $users, "type" => Auth::user()->type]);
     }
 
     /**
@@ -39,14 +45,20 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->type == "admin") {
+            $user_id_rule = 'required|numeric|exists:users,id';
+        } else {
+            $user_id_rule = 'required|numeric|in:' . Auth::user()->id;
+        }
+
         $request->validate([
             'name' => 'required|unique:companies|max:255',
-            'user_id' => 'required|numeric|exists:users,id',
+            'user_id' => $user_id_rule,
         ]);
 
         $entry = Company::create($request->all());
 
-        return redirect("/admin/companies")->with("success", "Created successfully!");
+        return redirect("/" . Auth::user()->type . "/companies")->with("success", "Created successfully!");
     }
 
     /**
@@ -68,8 +80,13 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
+        if (Auth::user()->type == "company" && $company->user->id != Auth::user()->id) {
+            return redirect("/company/companies")->with("danger", "You do not have the permission to edit this company.");
+        }
+
         $users = User::all();
-        return view("admin.companies.edit", ["users" => $users, "entry" => $company]);
+
+        return view("admin.companies.edit", ["users" => $users, "entry" => $company, "type" => Auth::user()->type]);
     }
 
     /**
@@ -81,14 +98,24 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
+        if (Auth::user()->type == "company" && $company->user->id != Auth::user()->id) {
+            return redirect("/company/companies")->with("danger", "You do not have the permission to edit this company.");
+        }
+
+        if (Auth::user()->type == "admin") {
+            $user_id_rule = 'required|numeric|exists:users,id';
+        } else {
+            $user_id_rule = 'required|numeric|in:' . Auth::user()->id;
+        }
+
         $request->validate([
             'name' => 'required|unique:companies,name,' . $company->id . '|max:255',
-            'user_id' => 'required|numeric|exists:users,id',
+            'user_id' => $user_id_rule,
         ]);
 
         $company->update($request->all());
 
-        return redirect("/admin/companies")->with("success", "Updated successfully!");
+        return redirect("/" . Auth::user()->type . "/companies")->with("success", "Updated successfully!");
     }
 
     /**
@@ -99,8 +126,12 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
+        if (Auth::user()->type == "company" && $company->user->id != Auth::user()->id) {
+            return redirect("/company/companies")->with("danger", "You do not have the permission to delete this company.");
+        }
+
         $company->delete();
 
-        return redirect("/admin/companies")->with("success", "Deleted successfully!");
+        return redirect("/" . Auth::user()->type . "/companies")->with("success", "Deleted successfully!");
     }
 }

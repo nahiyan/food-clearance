@@ -44,8 +44,13 @@ class FoodController extends Controller
      */
     public function create()
     {
-        $companies = Company::all();
-        return view("admin.foods.create")->with("companies", $companies);
+        if (Auth::user()->type == "admin") {
+            $companies = Company::all();
+        } else {
+            $companies = Auth::user()->companies;
+        }
+
+        return view("admin.foods.create", ["companies" => $companies, "type" => Auth::user()->type]);
     }
 
     /**
@@ -56,13 +61,25 @@ class FoodController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->type == "admin") {
+            $company_id_rule = 'required|numeric|exists:companies,id';
+        } else {
+            $companies = Auth::user()->companies;
+
+            $company_id_rule = 'required|numeric|in:';
+
+            foreach ($companies as $company) {
+                $company_id_rule .= $company->id . ",";
+            }
+        }
+
         $request->validate([
             'name' => 'required|unique:foods|max:255',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
             'expires_at' => 'required|date',
             'image' => 'required|image',
-            'company_id' => 'required|numeric|exists:companies,id',
+            'company_id' => $company_id_rule,
         ]);
 
         $path = $request->file('image')->store('public/images');
@@ -76,7 +93,7 @@ class FoodController extends Controller
 
         $entry = Food::create($request->all());
 
-        return redirect("/admin/foods")->with("success", "Created successfully!");
+        return redirect("/" . (Auth::user()->type) . "/foods")->with("success", "Created successfully!");
     }
 
     /**
@@ -98,9 +115,13 @@ class FoodController extends Controller
      */
     public function edit(Food $food)
     {
-        $companies = Company::all();
+        if (Auth::user()->type == "admin") {
+            $companies = Company::all();
+        } else {
+            $companies = Auth::user()->companies;
+        }
 
-        return view("admin.foods.edit", ["entry" => $food, "companies" => $companies]);
+        return view("admin.foods.edit", ["entry" => $food, "companies" => $companies, "type" => Auth::user()->type]);
     }
 
     /**
@@ -112,13 +133,25 @@ class FoodController extends Controller
      */
     public function update(Request $request, Food $food)
     {
+        if (Auth::user()->type == "admin") {
+            $company_id_rule = 'required|numeric|exists:companies,id';
+        } else {
+            $companies = Auth::user()->companies;
+
+            $company_id_rule = 'required|numeric|in:';
+
+            foreach ($companies as $company) {
+                $company_id_rule .= $company->id . ",";
+            }
+        }
+
         $request->validate([
             'name' => 'required|unique:foods,name,' . $food->id . '|max:255',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
             'expires_at' => 'required|date',
             'image' => 'sometimes|image',
-            'company_id' => 'required|numeric|exists:companies,id',
+            'company_id' => $company_id_rule,
         ]);
 
         if ($request->file("image")) {
@@ -140,7 +173,7 @@ class FoodController extends Controller
 
         $food->update($request->all());
 
-        return redirect("/admin/foods")->with("success", "Updated successfully!");
+        return redirect("/" . (Auth::user()->type) . "/foods")->with("success", "Updated successfully!");
     }
 
     /**
@@ -151,9 +184,15 @@ class FoodController extends Controller
      */
     public function destroy(Food $food)
     {
+        if (Auth::user()->type == "company") {
+            if ($food->company->user->id != Auth::user()->id) {
+                return redirect("/company/foods")->with("danger", "You do not have the permission to delete this item.");
+            }
+        }
+
         Storage::delete("public/images/" . $food->image_name);
         $food->delete();
 
-        return redirect("/admin/foods")->with("success", "Deleted successfully!");
+        return redirect("/" . (Auth::user()->type) . "/foods")->with("success", "Deleted successfully!");
     }
 }

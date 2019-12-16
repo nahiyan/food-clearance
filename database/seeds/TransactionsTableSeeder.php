@@ -1,9 +1,8 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
-class FoodsTableSeeder extends Seeder
+class TransactionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,23 +12,21 @@ class FoodsTableSeeder extends Seeder
     public function run()
     {
         // array which will be used for the insertion
-        $foods = [
+        $transactions = [
 
         ];
 
-        for ($i = 1; $i <= 50; $i++) {
-            $foods[] = [
-                'name' => Str::random(5),
-                'image_name' => 'test.jpg',
+        for ($i = 1; $i <= 300; $i++) {
+            $transactions[] = [
                 'price' => rand(1, 1000),
                 'quantity' => rand(1, 100),
-                'company_id' => rand(1, 7),
-                'expires_at' => Carbon::now()->add(rand(1, 10), "days")->format("Y-m-d H:i:s"),
+                'user_id' => rand(1, 11),
+                'food_id' => rand(1, 6),
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ];
         }
 
-        DB::table('foods')->insert($foods);
+        DB::table('transactions')->insert($transactions);
     }
 }

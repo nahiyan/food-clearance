@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Transaction;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -14,68 +15,22 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $entries = Transaction::latest()->get();
+        if (Auth::user()->type == "company") {
+            $entries = [];
 
-        return view("admin.transactions.index")->with("entries", $entries);
-    }
+            $entries = DB::table("transactions")
+                ->leftJoin("foods", "transactions.food_id", "=", "foods.id")
+                ->leftJoin("companies", "foods.company_id", "=", "companies.id")
+                ->where("companies.user_id", "=", Auth::user()->id)
+                ->select("transactions.*", "foods.name as food_name", "companies.name as company_name")
+                ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view("admin.transactions.create");
-    }
+            error_log(json_encode($entries));
+        } else {
+            $entries = Transaction::orderBy("id", "desc")->get();
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $entry = Transaction::create($request->all());
-
-        return redirect("/")->with("success", "Created successfully!");
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Transaction $transaction)
-    {
-        return view("admin.transactions.show")->with("entry", $transaction);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Transaction $transaction)
-    {
-        return view("admin.transactions.edit")->with("entry", $transaction);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Transaction $transaction)
-    {
-        $transaction->update($request->all());
-
-        return redirect("/")->with("success", "Updated successfully!");
+        return view("admin.transactions.index", ["entries" => $entries, "type" => Auth::user()->type]);
     }
 
     /**
@@ -86,8 +41,12 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
+        if (Auth::user()->type == "company" && $transaction->food->company->user->id != Auth::user()->id) {
+            return redirect("/company/transactions")->with("danger", "You do not have the permission to delete this item.");
+        }
+
         $transaction->delete();
 
-        return redirect("/")->with("success", "Deleted successfully!");
+        return redirect("/" . Auth::user()->type . "/transactions")->with("success", "Deleted successfully!");
     }
 }

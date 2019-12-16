@@ -1,10 +1,10 @@
-@extends("layouts.admin")
+@extends($type == "company" ? "layouts.company" : "layouts.admin")
 
 @section("content")
     <div class="is-box">
         <h1 class="title">List of Companies</h1>
     
-        <a href="{{ url("admin/companies/create") }}" class="button is-outlined">Create</a>
+        <a href="{{ url("$type/companies/create") }}" class="button is-outlined">Create</a>
     
         <hr>
     
@@ -26,13 +26,13 @@
                         <td>{{ Carbon\Carbon::parse($company->created_at)->diffForHumans() }}</td>
                         <td>{{ Carbon\Carbon::parse($company->updated_at)->diffForHumans() }}</td>
                         <td>
-                            <form action="{{ url("admin/companies/" . $company->id) }}" method="POST">
+                            <form action="{{ url("$type/companies/" . $company->id) }}" method="POST">
                                 @method("DELETE")
                                 @csrf
 
                                 <div class="field is-grouped">
                                     <p class="control">
-                                        <a class="button is-outlined" href="{{ url("admin/companies/" . $company->id . "/edit") }}">Edit</a>
+                                        <a class="button is-outlined" href="{{ url("$type/companies/" . $company->id . "/edit") }}">Edit</a>
                                     </p>
                                     <p class="control">
                                         <input type="submit" class="button is-outlined is-danger" }} value="Delete" onclick="return confirm('Are you sure?')"/>

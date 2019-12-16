@@ -4,7 +4,7 @@
     <div class="is-box">
         <h1 class="title">List of Food Items</h1>
     
-        <a href="{{ url("admin/foods/create") }}" class="button is-outlined">Create</a>
+        <a href="{{ url($type . "/foods/create") }}" class="button is-outlined">Create</a>
     
         <hr>
     
@@ -38,13 +38,13 @@
                         <td>{{ Carbon\Carbon::parse($food->created_at)->diffForHumans() }}</td>
                         <td>{{ Carbon\Carbon::parse($food->updated_at)->diffForHumans() }}</td>
                         <td>
-                            <form action="{{ url("admin/foods/" . $food->id) }}" method="POST">
+                            <form action="{{ url($type . "/foods/" . $food->id) }}" method="POST">
                                 @method("DELETE")
                                 @csrf
     
                                 <div class="field is-grouped">
                                     <p class="control">
-                                        <a class="button is-outlined" href="{{ url("admin/foods/" . $food->id . "/edit") }}">Edit</a>
+                                        <a class="button is-outlined" href="{{ url($type . "/foods/" . $food->id . "/edit") }}">Edit</a>
                                     </p>
         
                                     <p class="control">

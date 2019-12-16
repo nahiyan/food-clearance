@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
 Route::group(['middleware' => ['auth.company']], function () {
     Route::resource("company/foods", "FoodController");
     Route::resource("company/companies", "CompanyController");
-    // Route::resource("company/transactions", "TransactionController");
+    Route::resource("company/transactions", "TransactionController");
     Route::resource("company", "CompanyPanelController");
 });
 
