@@ -24,8 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-if (document.getElementById("search") != null) {
-    document.getElementById("search").addEventListener("input", function (e) {
+let searchE = document.getElementById("search");
+if (searchE != null) {
+    searchE.addEventListener("input", function (e) {
         let value = e.target.value.trim();
 
         if (value.length > 0) {
@@ -43,35 +44,39 @@ if (document.getElementById("search") != null) {
                     cols.setAttribute("class", "columns is-multiline");
                     cols.innerHTML = "";
 
-                    for (i = 0; i < foods.length; i++) {
-                        let food = foods[i];
+                    if (foods.length == 0) {
+                        document.getElementById("search-results").innerHTML = `<i>No food items found!</i>`;
+                    } else {
+                        for (i = 0; i < foods.length; i++) {
+                            let food = foods[i];
 
-                        cols.innerHTML +=
-                            `<div class="column is-one-quarter">
-                                <div class="card">
-                                    <div class="card-image">
-                                        <figure class="image is-4by3">
-                                            <img src="images/${food.image_name}">
-                                        </figure>
-                                    </div>
-                                    <div class="card-content">
-                                        <div class="media">
-                                            <div class="media-content">
-                                                <p class="title is-4">${food.name}</p>
-                                                <p class="subtitle is-6">Expires ${food.expires_at}.</p>
-                                                <p class="subtitle is-6">Manufactured by <a href="#">${food.company_name}</a>.</p>
+                            cols.innerHTML +=
+                                `<div class="column is-one-quarter">
+                                    <div class="card">
+                                        <div class="card-image">
+                                            <figure class="image is-4by3">
+                                                <img src="images/${food.image_name}">
+                                            </figure>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="media">
+                                                <div class="media-content">
+                                                    <p class="title is-4">${food.name}</p>
+                                                    <p class="subtitle is-6">Expires ${food.expires_at}.</p>
+                                                    <p class="subtitle is-6">Manufactured by <a href="#">${food.company_name}</a>.</p>
+                                                </div>
                                             </div>
                                         </div>
+                                        <footer class="card-footer">
+                                            <a href="#" class="card-footer-item">Buy</a>
+                                        </footer>
                                     </div>
-                                    <footer class="card-footer">
-                                        <a href="#" class="card-footer-item">Buy</a>
-                                    </footer>
                                 </div>
-                            </div>
-                            `;
-                    }
+                                `;
+                        }
 
-                    sr.appendChild(cols);
+                        sr.appendChild(cols);
+                    }
                 }
             };
             xhr.open("GET", "search/" + value, true);
@@ -79,8 +84,6 @@ if (document.getElementById("search") != null) {
         } else {
             document.getElementById("search-results").classList.add("hidden");
             document.getElementById("results").classList.remove("hidden");
-
-            document.getElementById("search-results").innerHTML = `<i>No food items found!</i>`;
         }
     });
 }

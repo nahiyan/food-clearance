@@ -1,9 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);html {
-  background-color: #F0F0F0;
+  background-color: #E9EBEE;
 }
 
 #content {
   margin-top: 1em;
+}
+
+.is-box {
   background: white;
   padding: 1.5em;
   border-radius: 5px;

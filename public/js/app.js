@@ -37040,9 +37040,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+var searchE = document.getElementById("search");
 
-if (document.getElementById("search") != null) {
-  document.getElementById("search").addEventListener("input", function (e) {
+if (searchE != null) {
+  searchE.addEventListener("input", function (e) {
     var value = e.target.value.trim();
 
     if (value.length > 0) {
@@ -37059,12 +37060,16 @@ if (document.getElementById("search") != null) {
           cols.setAttribute("class", "columns is-multiline");
           cols.innerHTML = "";
 
-          for (i = 0; i < foods.length; i++) {
-            var food = foods[i];
-            cols.innerHTML += "<div class=\"column is-one-quarter\">\n                                <div class=\"card\">\n                                    <div class=\"card-image\">\n                                        <figure class=\"image is-4by3\">\n                                            <img src=\"images/".concat(food.image_name, "\">\n                                        </figure>\n                                    </div>\n                                    <div class=\"card-content\">\n                                        <div class=\"media\">\n                                            <div class=\"media-content\">\n                                                <p class=\"title is-4\">").concat(food.name, "</p>\n                                                <p class=\"subtitle is-6\">Expires ").concat(food.expires_at, ".</p>\n                                                <p class=\"subtitle is-6\">Manufactured by <a href=\"#\">").concat(food.company_name, "</a>.</p>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <footer class=\"card-footer\">\n                                        <a href=\"#\" class=\"card-footer-item\">Buy</a>\n                                    </footer>\n                                </div>\n                            </div>\n                            ");
-          }
+          if (foods.length == 0) {
+            document.getElementById("search-results").innerHTML = "<i>No food items found!</i>";
+          } else {
+            for (i = 0; i < foods.length; i++) {
+              var food = foods[i];
+              cols.innerHTML += "<div class=\"column is-one-quarter\">\n                                    <div class=\"card\">\n                                        <div class=\"card-image\">\n                                            <figure class=\"image is-4by3\">\n                                                <img src=\"images/".concat(food.image_name, "\">\n                                            </figure>\n                                        </div>\n                                        <div class=\"card-content\">\n                                            <div class=\"media\">\n                                                <div class=\"media-content\">\n                                                    <p class=\"title is-4\">").concat(food.name, "</p>\n                                                    <p class=\"subtitle is-6\">Expires ").concat(food.expires_at, ".</p>\n                                                    <p class=\"subtitle is-6\">Manufactured by <a href=\"#\">").concat(food.company_name, "</a>.</p>\n                                                </div>\n                                            </div>\n                                        </div>\n                                        <footer class=\"card-footer\">\n                                            <a href=\"#\" class=\"card-footer-item\">Buy</a>\n                                        </footer>\n                                    </div>\n                                </div>\n                                ");
+            }
 
-          sr.appendChild(cols);
+            sr.appendChild(cols);
+          }
         }
       };
 
@@ -37073,7 +37078,6 @@ if (document.getElementById("search") != null) {
     } else {
       document.getElementById("search-results").classList.add("hidden");
       document.getElementById("results").classList.remove("hidden");
-      document.getElementById("search-results").innerHTML = "<i>No food items found!</i>";
     }
   });
 }
