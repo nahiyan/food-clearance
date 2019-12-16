@@ -38,8 +38,18 @@ class UsersTableSeeder extends Seeder
             'updated_at' => date("Y-m-d H:i:s"),
         ];
 
+        // company
+        $users[] = [
+            'name' => "shukhi",
+            'email' => "momena.akhter@northsouth.edu",
+            'password' => bcrypt("me"),
+            'type' => "company",
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
+        ];
+
         // companies
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 4; $i++) {
             $users[] = [
                 'name' => Str::random(5),
                 'email' => Str::random(5),

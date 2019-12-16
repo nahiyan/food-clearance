@@ -1,4 +1,4 @@
-@extends("layouts.admin")
+@extends($type == "company" ? "layouts.company" : "layouts.admin")
 
 @section("stylesheets")
     <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">

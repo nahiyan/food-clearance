@@ -12,11 +12,23 @@ class CompaniesTableSeeder extends Seeder
     public function run()
     {
         // array which will be used for the insertion
-        $companies = [
+        $companies = [];
 
+        $companies[] = [
+            'name' => "Shukhi's Bakery",
+            'user_id' => 7,
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
         ];
 
-        for ($i = 0; $i <= 5; $i++) {
+        $companies[] = [
+            'name' => "Shukhi's Pizza",
+            'user_id' => 7,
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
+        ];
+
+        for ($i = 1; $i <= 5; $i++) {
             $companies[] = [
                 'name' => Str::random(5),
                 'user_id' => rand(1, 11),

@@ -24,11 +24,16 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::resource("admin/foods", "FoodController");
     Route::resource("admin/companies", "CompanyController");
     Route::resource("admin/transactions", "TransactionController");
-    Route::resource("admin", "AdminController");
+    Route::resource("admin", "AdminPanelController");
 });
 
 // Company
-Route::resource("company", "CompanyController");
+Route::group(['middleware' => ['auth.company']], function () {
+    Route::resource("company/foods", "FoodController");
+    Route::resource("company/companies", "CompanyController");
+    // Route::resource("company/transactions", "TransactionController");
+    Route::resource("company", "CompanyPanelController");
+});
 
 // Search
 Route::get("search/{query}", "SearchController@index");

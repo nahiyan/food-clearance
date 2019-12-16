@@ -1,4 +1,4 @@
-@extends("layouts.admin")
+@extends($type == "company" ? "layouts.company" : "layouts.admin")
 
 @section("content")
     <div class="is-box">

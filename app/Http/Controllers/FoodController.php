@@ -6,6 +6,7 @@ use App\Company;
 use App\Food;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
@@ -17,9 +18,23 @@ class FoodController extends Controller
      */
     public function index()
     {
-        $entries = Food::orderBy("id", "desc")->get();
+        if (Auth::user()->type == "admin") {
+            $entries = Food::orderBy("id", "desc")->get();
+        } else {
+            $entries = [];
 
-        return view("admin.foods.index")->with("entries", $entries);
+            $companies = Auth::user()->companies;
+
+            foreach ($companies as $company) {
+                $foods = $company->foods;
+
+                foreach ($foods as $food) {
+                    $entries[] = $food;
+                }
+            }
+        }
+
+        return view("admin.foods.index", ["entries" => $entries, "type" => Auth::user()->type]);
     }
 
     /**

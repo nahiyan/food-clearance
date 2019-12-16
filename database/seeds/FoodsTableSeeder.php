@@ -23,7 +23,7 @@ class FoodsTableSeeder extends Seeder
                 'image_name' => 'test.jpg',
                 'price' => rand(1, 1000),
                 'quantity' => rand(1, 100),
-                'company_id' => rand(1, 5),
+                'company_id' => rand(1, 7),
                 'expires_at' => Carbon::now()->add(rand(1, 10), "days")->format("Y-m-d H:i:s"),
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
