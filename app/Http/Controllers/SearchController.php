@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use Carbon\Carbon;
-use App\Company;
-
 class SearchController extends Controller
 {
-    public function index(Request $request, $query) {
+    public function index(Request $request, $query)
+    {
         $foods = DB::table('foods')
-            ->where('name', 'ilike', "%$query%")
+            ->where('name', 'like', "%$query%")
             ->get();
 
         $food_structures = [];
-        foreach($foods as $food) {
+        foreach ($foods as $food) {
             $structure = array(
                 "id" => $food->id,
                 "name" => $food->name,
@@ -26,7 +26,7 @@ class SearchController extends Controller
                 "company_id" => $food->company_id,
                 "company_name" => Company::find($food->company_id)->name,
                 "created_at" => $food->created_at,
-                "updated_at" => $food->updated_at
+                "updated_at" => $food->updated_at,
             );
             array_push($food_structures, $structure);
         }
