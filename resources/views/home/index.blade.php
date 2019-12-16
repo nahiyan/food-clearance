@@ -18,7 +18,7 @@
                     <div class="card">
                         <div class="card-image">
                             <figure class="image is-4by3">
-                                <img src="images/{{ $food->image_name }}">
+                                <img src="{{ asset("storage/images/" . $food->image_name) }}">
                             </figure>
                         </div>
                         <div class="card-content">

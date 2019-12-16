@@ -27,7 +27,7 @@
                         <td>{{ $food->id }}</td>
                         <td>
                             <figure class="image is-64x64">
-                                <img src="{{ url("images/" . $food->image_name) }}">
+                                <img src="{{ asset("storage/images/" . $food->image_name) }}">
                             </figure>
                         </td>
                         <td>{{ $food->name }}</td>
