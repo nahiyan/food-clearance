@@ -106,7 +106,7 @@
             <div class="field">
                 <label for="company_id" class="label">{{ __('Company') }}</label>
     
-                <div id="image-upload">
+                <div>
                     <div class="select">
                         <select name="company_id">
                             @foreach($companies as $company)

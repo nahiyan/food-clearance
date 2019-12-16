@@ -51,6 +51,9 @@
                         <a class="navbar-item" href="{{ url("admin/companies") }}">
                             Companies
                         </a>
+                        <a class="navbar-item" href="{{ url("admin/transactions") }}">
+                            Transactions
+                        </a>
                     </div>
                 
                     <div class="navbar-end">
@@ -99,7 +102,7 @@
             @endif
 
             @section('content')
-                <p>Hey now brown cow!</p>
+                
             @show
         </div>
 

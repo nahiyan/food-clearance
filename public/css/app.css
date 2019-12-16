@@ -21,3 +21,7 @@ p.subtitle.is-6.price {
   color: orange;
 }
 
+.invalid-feedback strong {
+  color: #e3342f;
+}
+

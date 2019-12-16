@@ -21,8 +21,9 @@ Auth::routes();
 // Admin
 Route::group(['middleware' => ['auth.admin']], function () {
     Route::resource("admin/users", "UserController");
-    Route::resource("admin/companies", "CompanyController");
     Route::resource("admin/foods", "FoodController");
+    Route::resource("admin/companies", "CompanyController");
+    Route::resource("admin/transactions", "TransactionController");
     Route::resource("admin", "AdminController");
 });
 

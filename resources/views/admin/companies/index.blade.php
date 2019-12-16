@@ -13,16 +13,18 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Created at</th>
-                    <th>Updated at</th>
+                    <th>Manager</th>
+                    <th>Created</th>
+                    <th>Updated</th>
                     <th>Actions</th>
                 </tr>
-                @foreach($companies as $company)
+                @foreach($entries as $company)
                     <tr>
                         <td>{{ $company->id }}</td>
                         <td>{{ $company->name }}</td>
-                        <td>{{ $company->created_at }}</td>
-                        <td>{{ $company->updated_at }}</td>
+                        <td>{{ $company->user !== null ? $company->user->name : "nil" }}</td>
+                        <td>{{ Carbon\Carbon::parse($company->created_at)->diffForHumans() }}</td>
+                        <td>{{ Carbon\Carbon::parse($company->updated_at)->diffForHumans() }}</td>
                         <td>
                             <form action="{{ url("admin/companies/" . $company->id) }}" method="POST">
                                 @method("DELETE")

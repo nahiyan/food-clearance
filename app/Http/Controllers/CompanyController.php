@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Company;
+use App\User;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -14,8 +15,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
-        return view("admin.companies.index")->with("companies", $companies);
+        $entries = Company::orderBy("id", "desc")->get();
+
+        return view("admin.companies.index")->with("entries", $entries);
     }
 
     /**
@@ -25,7 +27,8 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::all();
+        return view("admin.companies.create")->with("users", $users);
     }
 
     /**
@@ -36,51 +39,68 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:companies|max:255',
+            'user_id' => 'required|numeric|exists:users,id',
+        ]);
+
+        $entry = Company::create($request->all());
+
+        return redirect("/admin/companies")->with("success", "Created successfully!");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Company $company)
     {
-        //
+        return view("admin.companies.show")->with("entry", $company);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Company $company)
     {
-        //
+        $users = User::all();
+        return view("admin.companies.edit", ["users" => $users, "entry" => $company]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Company $company)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:companies,name,' . $company->id . '|max:255',
+            'user_id' => 'required|numeric|exists:users,id',
+        ]);
+
+        $company->update($request->all());
+
+        return redirect("/admin/companies")->with("success", "Updated successfully!");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        //
+        $company->delete();
+
+        return redirect("/admin/companies")->with("success", "Deleted successfully!");
     }
 }

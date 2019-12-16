@@ -13,11 +13,11 @@ class UsersTableSeeder extends Seeder
     {
         // array which will be used for the insertion
         $users = [
-            
+
         ];
 
         // general users
-        for ($i = 0; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $users[] = [
                 'name' => Str::random(5),
                 'email' => Str::random(5),
@@ -39,7 +39,7 @@ class UsersTableSeeder extends Seeder
         ];
 
         // companies
-        for ($i = 0; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $users[] = [
                 'name' => Str::random(5),
                 'email' => Str::random(5),

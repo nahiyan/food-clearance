@@ -18,8 +18,8 @@
                     <th>Quantity</th>
                     <th>Manufacturer</th>
                     <th>Expires at</th>
-                    <th>Created at</th>
-                    <th>Updated at</th>
+                    <th>Created</th>
+                    <th>Updated</th>
                     <th>Actions</th>
                 </tr>
                 @foreach($entries as $food)
@@ -35,8 +35,8 @@
                         <td>{{ $food->quantity }}</td>
                         <td>{{ $food->company->name }}</td>
                         <td>{{ $food->expires_at }}</td>
-                        <td>{{ $food->created_at }}</td>
-                        <td>{{ $food->updated_at }}</td>
+                        <td>{{ Carbon\Carbon::parse($food->created_at)->diffForHumans() }}</td>
+                        <td>{{ Carbon\Carbon::parse($food->updated_at)->diffForHumans() }}</td>
                         <td>
                             <form action="{{ url("admin/foods/" . $food->id) }}" method="POST">
                                 @method("DELETE")
