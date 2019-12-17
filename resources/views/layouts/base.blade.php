@@ -45,6 +45,10 @@
                                     Company Panel
                                 </a>
                             @endif
+
+                            <a class="navbar-item" href="{{ url("/cart") }}">
+                                Cart
+                            </a>
                         @endif
                     </div>
                 

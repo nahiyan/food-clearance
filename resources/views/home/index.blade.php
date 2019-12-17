@@ -19,4 +19,5 @@
         </div>
     </div>
     
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/flouthoc/minAjax.js@master/minify/index.min.js"></script>
 @endsection

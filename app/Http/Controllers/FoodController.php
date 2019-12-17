@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\Food;
+use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -194,5 +195,28 @@ class FoodController extends Controller
         $food->delete();
 
         return redirect("/" . (Auth::user()->type) . "/foods")->with("success", "Deleted successfully!");
+    }
+
+    public function buy(Request $request, $id)
+    {
+        $food = Food::findOrFail($id);
+
+        $request->validate([
+            'quantity' => 'required|numeric|min:1|max:' . $food->quantity,
+        ]);
+
+        $quantity = $request->input("quantity");
+
+        Transaction::create([
+            "price" => $food->price,
+            "quantity" => $quantity,
+            "user_id" => Auth::user()->id,
+            "food_id" => $food->id,
+        ]);
+
+        $food->quantity = $food->quantity - (int) $quantity;
+        $food->save();
+
+        return redirect("/")->with("success", "Your order has been placed successfully!");
     }
 }

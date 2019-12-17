@@ -48,3 +48,11 @@ if (searchE != null) {
         }
     });
 }
+
+function buy(e) {
+    console.log(e);
+}
+
+function add_to_cart(e) {
+
+}

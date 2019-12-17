@@ -23,7 +23,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::resource("admin/users", "UserController");
     Route::resource("admin/foods", "FoodController");
     Route::resource("admin/companies", "CompanyController");
-    Route::resource("admin/transactions", "TransactionController");
+    Route::resource("admin/transactions", "TransactionController")->only("index", "destroy");
     Route::resource("admin", "AdminPanelController");
 });
 
@@ -31,9 +31,16 @@ Route::group(['middleware' => ['auth.admin']], function () {
 Route::group(['middleware' => ['auth.company']], function () {
     Route::resource("company/foods", "FoodController");
     Route::resource("company/companies", "CompanyController");
-    Route::resource("company/transactions", "TransactionController");
+    Route::resource("company/transactions", "TransactionController")->only("index", "destroy");
     Route::resource("company", "CompanyPanelController");
 });
 
 // Search
 Route::get("search/{query}", "SearchController@index");
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::resource("cart", "CartController");
+
+    // Food purchase
+    Route::post("foods/{id}/buy", "FoodController@buy")->name("foods.buy");
+});
