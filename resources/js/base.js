@@ -28,6 +28,7 @@ let searchE = document.getElementById("search");
 if (searchE != null) {
     searchE.addEventListener("input", function (e) {
         let value = e.target.value.trim();
+        let sr = document.getElementById("search-results");
 
         if (value.length > 0) {
             var xhr = new XMLHttpRequest();
@@ -36,47 +37,7 @@ if (searchE != null) {
                     document.getElementById("search-results").classList.remove("hidden");
                     document.getElementById("results").classList.add("hidden");
 
-                    let foods = JSON.parse(this.responseText);
-                    let sr = document.getElementById("search-results");
-                    sr.innerHTML = "";
-
-                    let cols = document.createElement("div");
-                    cols.setAttribute("class", "columns is-multiline");
-                    cols.innerHTML = "";
-
-                    if (foods.length == 0) {
-                        document.getElementById("search-results").innerHTML = `<i>No food items found!</i>`;
-                    } else {
-                        for (i = 0; i < foods.length; i++) {
-                            let food = foods[i];
-
-                            cols.innerHTML +=
-                                `<div class="column is-one-quarter">
-                                    <div class="card">
-                                        <div class="card-image">
-                                            <figure class="image is-4by3">
-                                                <img src="images/${food.image_name}">
-                                            </figure>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="media">
-                                                <div class="media-content">
-                                                    <p class="title is-4">${food.name}</p>
-                                                    <p class="subtitle is-6">Expires ${food.expires_at}.</p>
-                                                    <p class="subtitle is-6">Manufactured by <a href="#">${food.company_name}</a>.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <footer class="card-footer">
-                                            <a href="#" class="card-footer-item">Buy</a>
-                                        </footer>
-                                    </div>
-                                </div>
-                                `;
-                        }
-
-                        sr.appendChild(cols);
-                    }
+                    sr.innerHTML = this.responseText;
                 }
             };
             xhr.open("GET", "search/" + value, true);
