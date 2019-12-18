@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CartItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -17,7 +18,18 @@ class CartController extends Controller
     {
         $entries = CartItem::orderBy("id", "desc")->where("user_id", Auth::user()->id)->get();
 
-        return view("cart.index")->with("entries", $entries);
+        $can_checkout = true;
+        $net_price = 0;
+        foreach ($entries as $entry) {
+            $net_price += $entry->food->price * $entry->quantity;
+
+            if ($entry->quantity > $entry->food->quantity) {
+                $can_checkout = false;
+            }
+
+        }
+
+        return view("cart.index", ["entries" => $entries, "net_price" => $net_price, "can_checkout" => $can_checkout]);
     }
 
     /**
@@ -72,6 +84,41 @@ class CartController extends Controller
 
     public function checkout()
     {
-        return "Checkout";
+        $entries = CartItem::orderBy("id", "desc")->where("user_id", Auth::user()->id)->get();
+
+        $can_checkout = true;
+        foreach ($entries as $entry) {
+            if ($entry->quantity > $entry->food->quantity) {
+                $can_checkout = false;
+
+                break;
+            }
+        }
+
+        if (!$can_checkout) {
+            return redirect("/cart")->with("danger", "You cannot checkout as one or more of the items in your cart are in amount exceeding that available.");
+        } else {
+            // insert transactions
+            $transactions = [];
+            foreach ($entries as $entry) {
+                $transactions[] = [
+                    "price" => $entry->food->price,
+                    "quantity" => $entry->quantity,
+                    "user_id" => Auth::user()->id,
+                    "food_id" => $entry->food->id,
+                ];
+
+                // update quantities of foods
+                $entry->food->quantity = $entry->food->quantity - $entry->quantity;
+                $entry->food->save();
+            }
+
+            DB::table("transactions")->insert($transactions);
+
+            // clear cart
+            CartItem::orderBy("id", "desc")->where("user_id", Auth::user()->id)->delete();
+
+            return redirect("/cart")->with("success", "Cart checked out successfully!");
+        }
     }
 }

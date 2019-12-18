@@ -16,6 +16,48 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" integrity="sha256-vK3UTo/8wHbaUn+dTQD0X6dzidqc5l7gczvH+Bnowwk=" crossorigin="anonymous" />
         
         <link rel="stylesheet" href="{{ asset("css/app.css") }}">
+
+        <script>
+            async function buy(e, id) {
+                let quantity = e.parentElement.querySelector("input[name='quantity']").value;
+    
+                let response = await axios({
+                    method: 'post',
+                    url: 'foods/' + id + '/buy',
+                    data: {
+                        quantity: quantity
+                    }
+                });
+    
+                if (response.status == 200) {
+                    document.getElementById("results").classList.remove("hidden");
+                    document.getElementById("search-results").classList.add("hidden");
+    
+                    document.getElementById("results").innerHTML = response.data;
+    
+                    document.getElementById("modal").classList.add("is-active");
+                    document.getElementById("modal").querySelector(".modal-content .box").innerHTML = "Order placed successfully!";
+                }
+            }
+    
+            async function addToCart(e, id) {
+                let quantity = parseInt(e.parentElement.querySelector("input[name='quantity']").value);
+    
+                let response = await axios({
+                    method: 'post',
+                    url: "{{ route("cart.store") }}",
+                    data: {
+                        quantity: quantity,
+                        food_id: id
+                    }
+                });
+    
+                if (response.status == 200) {
+                    document.getElementById("modal").classList.add("is-active");
+                    document.getElementById("modal").querySelector(".modal-content .box").innerHTML = "Added to cart successfully!";
+                }
+            }
+        </script>
     </head>
     <body>
         <div class="modal" id="modal">

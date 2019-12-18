@@ -29,3 +29,8 @@ p.subtitle.is-6.price {
   margin-bottom: 1em;
 }
 
+.card.is-danger {
+  border: 1px solid red;
+  opacity: 0.5;
+}
+

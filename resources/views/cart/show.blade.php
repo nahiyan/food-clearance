@@ -1,5 +1,5 @@
 <div class="column is-one-quarter">
-    <div class="card">
+    <div class="card {{ ($item->quantity > $item->food->quantity) ? "is-danger" : "" }}">
         <div class="card-image">
             <figure class="image is-4by3">
                 <img src="{{ asset("storage/images/" . $item->food->image_name) }}">
@@ -9,8 +9,12 @@
             <div class="media">
                 <div class="media-content">
                     <p class="title is-4">
-                        {{ $item->food->name }}
-                        <span class="subtitle is-6"> x {{ $item->quantity }}</span>
+                        <span>
+                            {{ $item->food->name }}
+                        </span>
+                        <span class="subtitle is-6">
+                            x {{ $item->quantity }}
+                       </span>
                     </p>
                     <hr/>
                     <p class="subtitle is-6 price">৳ {{ $item->food->price }}</p>

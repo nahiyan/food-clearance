@@ -25,9 +25,15 @@
                         <input type="number" name="quantity" class="input" value="1">
                     </div>
 
-                    <input type="button" class="button is-outlined" onclick="addToCart(this, {{ $food->id }})" value="Add to Cart"/>
+                    @if(Auth::check())
+                        <input type="button" class="button is-outlined" onclick="addToCart(this, {{ $food->id }})" value="Add to Cart"/>
 
-                    <input type="button" class="button is-outlined is-success" value="Buy" onclick="if(confirm('Are you sure?')) buy(this, {{ $food->id }})"/>
+                        <input type="button" class="button is-outlined is-success" value="Buy" onclick="if(confirm('Are you sure?')) buy(this, {{ $food->id }})"/>
+                    @else
+                        <a class="button is-outlined" href="{{ route("login") }}">Add to Cart</a>
+
+                        <a class="button is-outlined is-success" href="{{ route("login") }}">Buy</a>
+                    @endif
                 </div>
             </div>
         </div>
