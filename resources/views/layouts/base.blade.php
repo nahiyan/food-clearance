@@ -15,9 +15,19 @@
         <!-- Styles -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" integrity="sha256-vK3UTo/8wHbaUn+dTQD0X6dzidqc5l7gczvH+Bnowwk=" crossorigin="anonymous" />
         
-        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="{{ asset("css/app.css") }}">
     </head>
     <body>
+        <div class="modal" id="modal">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+
         <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
             <div class="container">
                 <div class="navbar-brand">
@@ -34,6 +44,10 @@
                             Home
                         </a>
                         @if(Auth::check())
+                            <a class="navbar-item" href="{{ url("/cart") }}">
+                                Cart
+                            </a>
+
                             @if(Auth::user()->type == "admin")
                                 <a class="navbar-item" href="{{ url("/admin") }}">
                                     Admin Panel
@@ -45,10 +59,6 @@
                                     Company Panel
                                 </a>
                             @endif
-
-                            <a class="navbar-item" href="{{ url("/cart") }}">
-                                Cart
-                            </a>
                         @endif
                     </div>
                 
@@ -112,6 +122,6 @@
             @show
         </div>
 
-        <script src="js/app.js"></script>
+        <script src="{{ asset("js/app.js") }}"></script>
     </body>
 </html>

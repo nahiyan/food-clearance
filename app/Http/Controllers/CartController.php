@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CartItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -14,19 +15,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        $entries = CartItem::orderBy("id", "desc")->get();
+        $entries = CartItem::orderBy("id", "desc")->where("user_id", Auth::user()->id)->get();
 
         return view("cart.index")->with("entries", $entries);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view("cart.create");
     }
 
     /**
@@ -37,45 +28,29 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $entry = CartItem::create($request->all());
+        $request->validate([
+            'quantity' => 'required|numeric|min:1',
+            'food_id' => 'required|numeric|exists:foods,id',
+        ]);
 
-        return redirect("/")->with("success", "Created successfully!");
-    }
+        $request->merge([
+            "user_id" => Auth::user()->id,
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\CartItem  $cartItem
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CartItem $cartItem)
-    {
-        return view("cart.show")->with("entry", $cartItem);
-    }
+        $existing_items = CartItem::where([
+            ["food_id", $request->input("food_id")],
+            ["user_id", Auth::user()->id],
+        ])->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CartItem  $cartItem
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CartItem $cartItem)
-    {
-        return view("cart.edit")->with("entry", $cartItem);
-    }
+        if ($existing_items->count() == 0) {
+            CartItem::create($request->all());
+        } else {
+            $existing_item = $existing_items->first();
+            $existing_item->quantity = $existing_item->quantity + $request->input("quantity");
+            $existing_item->save();
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CartItem  $cartItem
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CartItem $cartItem)
-    {
-        $cartItem->update($request->all());
-
-        return redirect("/")->with("success", "Updated successfully!");
+        return "";
     }
 
     /**
@@ -84,10 +59,19 @@ class CartController extends Controller
      * @param  \App\CartItem  $cartItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CartItem $cartItem)
+    public function destroy(CartItem $cart)
     {
-        $cartItem->delete();
+        if ($cart->user_id == Auth::user()->id) {
+            $cart->delete();
+        } else {
+            return redirect("/cart")->with("danger", "You can only delete your own cart items.");
+        }
 
-        return redirect("/")->with("success", "Deleted successfully!");
+        return redirect("/cart")->with("success", "Deleted successfully!");
+    }
+
+    public function checkout()
+    {
+        return "Checkout";
     }
 }

@@ -217,6 +217,10 @@ class FoodController extends Controller
         $food->quantity = $food->quantity - (int) $quantity;
         $food->save();
 
-        return redirect("/")->with("success", "Your order has been placed successfully!");
+        // Respond with updated foods list
+
+        $foods = Food::orderBy("expires_at", "asc")->get();
+
+        return view('foods.index')->with("foods", $foods);
     }
 }

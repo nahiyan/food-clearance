@@ -39,7 +39,8 @@ Route::group(['middleware' => ['auth.company']], function () {
 Route::get("search/{query}", "SearchController@index");
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::resource("cart", "CartController");
+    Route::resource("cart", "CartController")->only("index", "store", "destroy");
+    Route::get("cart/checkout", "CartController@checkout")->name("cart.checkout");
 
     // Food purchase
     Route::post("foods/{id}/buy", "FoodController@buy")->name("foods.buy");

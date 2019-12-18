@@ -14,7 +14,7 @@
                     </p>
                     <hr/>
                     <p class="subtitle is-6 price">৳ {{ $food->price }}</p>
-                    <p class="subtitle is-6">Expires {{ $food->expires_at }}.</p>
+                    <p class="subtitle is-6">Expires {{ Carbon\Carbon::parse($food->expires_at)->diffForHumans() }}.</p>
                     <p class="subtitle is-6">Manufactured by <a href="#">{{ ($food->company_name == null) ? $food->company->name : $food->company_name }}</a>.</p>
                 </div>
             </div>
@@ -25,21 +25,9 @@
                         <input type="number" name="quantity" class="input" value="1">
                     </div>
 
-                    <input type="submit" class="button is-outlined" onclick="add_to_cart(this)" value="Add to Cart"/>
+                    <input type="button" class="button is-outlined" onclick="addToCart(this, {{ $food->id }})" value="Add to Cart"/>
 
-                    <input type="submit" class="button is-outlined is-success" value="Buy" onclick="if(confirm('Are you sure?')) buy(this)"/>
-
-                    {{-- <form action="{{ route("foods.buy", $food->id) }}" method="POST"> --}}
-                        {{-- @csrf --}}
-                        
-                    {{-- </form> --}}
-
-                    {{-- <form action="{{ route("cart.store") }}" method="POST">
-                        @csrf
-                        @method("PUT") --}}
-        
-                        
-                    {{-- </form> --}}
+                    <input type="button" class="button is-outlined is-success" value="Buy" onclick="if(confirm('Are you sure?')) buy(this, {{ $food->id }})"/>
                 </div>
             </div>
         </div>

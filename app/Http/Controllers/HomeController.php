@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Food;
-use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -25,10 +24,6 @@ class HomeController extends Controller
     public function index()
     {
         $foods = Food::orderBy("expires_at", "asc")->get();
-
-        foreach ($foods as $food) {
-            $food->expires_at = (new Carbon($food->expires_at))->diffForHumans();
-        }
 
         return view('home.index')->with("foods", $foods);
     }

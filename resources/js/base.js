@@ -49,10 +49,12 @@ if (searchE != null) {
     });
 }
 
-function buy(e) {
-    console.log(e);
-}
+let modal = document.querySelector("#modal");
 
-function add_to_cart(e) {
+let modalCloseHandler = function (e) {
+    e.preventDefault();
+    modal.classList.remove('is-active');
+};
 
-}
+modal.querySelector('.modal-background').addEventListener('click', modalCloseHandler);
+modal.querySelector('.modal-close').addEventListener('click', modalCloseHandler);
