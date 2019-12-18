@@ -34,7 +34,7 @@
                         <td>{{ $food->price }}</td>
                         <td>{{ $food->quantity }}</td>
                         <td>{{ $food->company->name }}</td>
-                        <td>{{ $food->expires_at }}</td>
+                        <td>{{ Carbon\Carbon::parse($food->expires_at)->diffForHumans() }}</td>
                         <td>{{ Carbon\Carbon::parse($food->created_at)->diffForHumans() }}</td>
                         <td>{{ Carbon\Carbon::parse($food->updated_at)->diffForHumans() }}</td>
                         <td>
