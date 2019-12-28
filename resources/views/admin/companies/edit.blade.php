@@ -4,7 +4,7 @@
     <div class="is-box">
         <h1 class="title">Edit</h1>
     
-        <form method="POST" action="{{ route("companies.update", $entry) }}">
+        <form method="POST" action="{{ route("$type.companies.update", $entry) }}">
             @csrf
             @method("PUT")
     

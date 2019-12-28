@@ -4,7 +4,7 @@
     <div class="is-box">
         <h1 class="title">Create</h1>
 
-        <form method="POST" action="{{ route("users.store") }}">
+        <form method="POST" action="{{ route("$type.users.store") }}">
             @csrf
 
             <div class="field">

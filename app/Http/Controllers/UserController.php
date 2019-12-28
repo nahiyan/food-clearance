@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -27,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view("admin.users.create");
+        return view("admin.users.create", ["type" => Auth::user()->type]);
     }
 
     /**
@@ -76,7 +77,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view("admin.users.edit")->with("entry", $user);
+        return view("admin.users.edit")->with("entry", $user)->with("type", Auth::user()->type);
     }
 
     /**

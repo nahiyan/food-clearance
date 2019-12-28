@@ -9,7 +9,7 @@
     <div class="is-box">
         <h1 class="title">Edit</h1>
     
-        <form method="POST" action="{{ route("foods.update", $entry) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route("$type.foods.update", $entry) }}" enctype="multipart/form-data">
             @csrf
             @method("PUT")
     

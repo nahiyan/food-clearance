@@ -9,7 +9,7 @@
     <div class="is-box">
         <h1 class="title">Create</h1>
     
-        <form method="POST" action="{{ route("foods.store") }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route("$type.foods.store") }}" enctype="multipart/form-data">
             @csrf
     
             <div class="field">

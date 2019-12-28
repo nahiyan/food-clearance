@@ -19,26 +19,31 @@ Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 // Admin
-Route::group(['middleware' => ['auth.admin']], function () {
-    Route::resource("admin/users", "UserController");
-    Route::resource("admin/foods", "FoodController");
-    Route::resource("admin/companies", "CompanyController");
-    Route::resource("admin/transactions", "TransactionController")->only("index", "destroy");
-    Route::resource("admin", "AdminPanelController");
+Route::middleware(['auth.admin'])->group(function () {
+    Route::name("admin.")->group(function () {
+        Route::resource("admin/users", "UserController");
+        Route::resource("admin/foods", "FoodController");
+        Route::resource("admin/companies", "CompanyController");
+        Route::resource("admin/transactions", "TransactionController")->only("index", "destroy");
+    });
+    Route::resource("admin", "AdminPanelController")->only("index");
 });
 
 // Company
-Route::group(['middleware' => ['auth.company']], function () {
-    Route::resource("company/foods", "FoodController");
-    Route::resource("company/companies", "CompanyController");
-    Route::resource("company/transactions", "TransactionController")->only("index", "destroy");
-    Route::resource("company", "CompanyPanelController");
+Route::middleware(['auth.company'])->group(function () {
+    Route::name("company.")->group(function () {
+        Route::resource("company/foods", "FoodController");
+        Route::resource("company/companies", "CompanyController");
+        Route::resource("company/transactions", "TransactionController")->only("index", "destroy");
+    });
+    Route::resource("company", "CompanyPanelController")->only("index");
 });
 
 // Search
 Route::get("search/{query}", "SearchController@index");
 
 Route::group(['middleware' => ['auth']], function () {
+    // cart
     Route::resource("cart", "CartController")->only("index", "store", "destroy");
     Route::get("cart/checkout", "CartController@checkout")->name("cart.checkout");
 
