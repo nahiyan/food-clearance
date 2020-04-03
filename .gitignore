@@ -13,3 +13,4 @@ yarn-error.log
 .editorconfig
 *.code-workspace
 *.sh
+phpunit

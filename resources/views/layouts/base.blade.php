@@ -122,7 +122,7 @@
                                         <strong>Register</strong>
                                     </a>
                                     <a class="button is-light" href="{{ url("login") }}">
-                                        Log in
+                                        Login
                                     </a>
                                 @else
                                     <form action="{{ url("logout") }}" method="POST">

@@ -37069,13 +37069,15 @@ if (searchE != null) {
 
 var modal = document.querySelector("#modal");
 
-var modalCloseHandler = function modalCloseHandler(e) {
-  e.preventDefault();
-  modal.classList.remove('is-active');
-};
+if (modal != null) {
+  var modalCloseHandler = function modalCloseHandler(e) {
+    e.preventDefault();
+    modal.classList.remove('is-active');
+  };
 
-modal.querySelector('.modal-background').addEventListener('click', modalCloseHandler);
-modal.querySelector('.modal-close').addEventListener('click', modalCloseHandler);
+  modal.querySelector('.modal-background').addEventListener('click', modalCloseHandler);
+  modal.querySelector('.modal-close').addEventListener('click', modalCloseHandler);
+}
 
 /***/ }),
 
