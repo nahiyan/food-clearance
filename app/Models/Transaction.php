@@ -1,23 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class Company extends Model
+class Transaction extends Model
 {
     protected $fillable = [
-        'name', "user_id",
+        "user_id", "food_id", "quantity", "price",
     ];
 
     public function user()
     {
         return $this->belongsTo('App\User');
     }
-
-    public function foods()
+    public function food()
     {
-        return $this->hasMany('App\Food');
+        return $this->belongsTo('App\Food');
     }
 }

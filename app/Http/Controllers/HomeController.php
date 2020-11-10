@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Food;
+use App\Models\Food;
 
 class HomeController extends Controller
 {
