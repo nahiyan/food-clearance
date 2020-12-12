@@ -12,10 +12,10 @@ class CartItem extends Model
 
     public function food()
     {
-        return $this->belongsTo("App\Food");
+        return $this->belongsTo("App\Models\Food");
     }
     public function user()
     {
-        return $this->belongsTo("App\User");
+        return $this->belongsTo("App\Models\User");
     }
 }

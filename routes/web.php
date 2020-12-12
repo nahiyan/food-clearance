@@ -19,6 +19,9 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CompanyPanelController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\AdminPanelController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\TransactionController;
 
 // Home
 Route::get("/", [HomeController::class, 'index'])->name("index");
@@ -30,22 +33,22 @@ Auth::routes();
 // Admin
 Route::middleware(['auth.admin'])->group(function () {
     Route::name("admin.")->group(function () {
-        Route::resource("admin/users", "UserController");
-        Route::resource("admin/foods", "FoodController");
-        Route::resource("admin/companies", "CompanyController");
-        Route::resource("admin/transactions", "TransactionController")->only("index", "destroy");
+        Route::resource("admin/users", UserController::class);
+        Route::resource("admin/foods", FoodController::class);
+        Route::resource("admin/companies", CompanyController::class);
+        Route::resource("admin/transactions", TransactionController::class)->only("index", "destroy");
     });
-    Route::resource("admin", "AdminPanelController")->only("index");
+    Route::resource("admin", AdminPanelController::class)->only("index");
 });
 
 // Company
 Route::middleware(['auth.company'])->group(function () {
     Route::name("company.")->group(function () {
-        Route::resource("company/foods", "FoodController");
-        Route::resource("company/companies", "CompanyController");
-        Route::resource("company/transactions", "TransactionController")->only("index", "destroy");
+        Route::resource("company/foods", FoodController::class);
+        Route::resource("company/companies", CompanyController::class);
+        Route::resource("company/transactions", TransactionController::class)->only("index", "destroy");
     });
-    Route::resource("company", "CompanyPanelController")->only("index");
+    Route::resource("company", CompanyPanelController::class)->only("index");
 });
 
 // Search
@@ -53,7 +56,7 @@ Route::get("search/{query}", [SearchController::class, 'index']);
 
 Route::group(['middleware' => ['auth']], function () {
     // cart
-    Route::resource("cart", "CartController")->only("index", "store", "destroy");
+    Route::resource("cart", CartController::class)->only("index", "store", "destroy");
     Route::get("cart/checkout", [CartController::class, 'checkout'])->name("cart.checkout");
 
     // Food purchase
