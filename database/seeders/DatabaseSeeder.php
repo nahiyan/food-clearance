@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\CompaniesTableSeeder;
 use Database\Seeders\FoodsTableSeeder;
+use Database\Seeders\ReportsTableSeeder;
 use Database\Seeders\TransactionsTableSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CompaniesTableSeeder::class);
         $this->call(FoodsTableSeeder::class);
         $this->call(TransactionsTableSeeder::class);
+        $this->call(ReportsTableSeeder::class);
     }
 }

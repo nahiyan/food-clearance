@@ -22,6 +22,7 @@ use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReportController;
 
 // Home
 Route::get("/", [HomeController::class, 'index'])->name("index");
@@ -37,6 +38,7 @@ Route::middleware(['auth.admin'])->group(function () {
         Route::resource("admin/foods", FoodController::class);
         Route::resource("admin/companies", CompanyController::class);
         Route::resource("admin/transactions", TransactionController::class)->only("index", "destroy");
+        Route::resource("admin/reports", ReportController::class)->only("index", "destroy");
     });
     Route::resource("admin", AdminPanelController::class)->only("index");
 });
@@ -54,11 +56,15 @@ Route::middleware(['auth.company'])->group(function () {
 // Search
 Route::get("search/{query}", [SearchController::class, 'index']);
 
+// Logged in users
 Route::group(['middleware' => ['auth']], function () {
-    // cart
+    // Cart
     Route::resource("cart", CartController::class)->only("index", "store", "destroy");
     Route::get("cart/checkout", [CartController::class, 'checkout'])->name("cart.checkout");
 
     // Food purchase
     Route::post("foods/{id}/buy", [FoodController::class, 'buy'])->name("foods.buy");
+
+    // Report
+    Route::resource("reports", ReportController::class)->only("store", "create");
 });

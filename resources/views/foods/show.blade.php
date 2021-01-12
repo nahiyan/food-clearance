@@ -12,13 +12,15 @@
                         {{ $food->name }}
                         <span class="subtitle is-6"> x {{ $food->quantity }}</span>
                     </p>
-                    <hr/>
+                    <hr />
                     <p class="subtitle is-6 price">৳ {{ $food->price }}</p>
                     <p class="subtitle is-6">Expires {{ Carbon\Carbon::parse($food->expires_at)->diffForHumans() }}.</p>
-                    <p class="subtitle is-6">Manufactured by <a href="#">{{ ($food->company_name == null) ? $food->company->name : $food->company_name }}</a>.</p>
+                    <p class="subtitle is-6">Manufactured by <a
+                            href="#">{{ ($food->company_name == null) ? $food->company->name : $food->company_name }}</a>.
+                    </p>
                 </div>
             </div>
-            <hr/>
+            <hr />
             <div class="columns">
                 <div class="column">
                     <div class="field">
@@ -26,13 +28,23 @@
                     </div>
 
                     @if(Auth::check())
-                        <input type="button" class="button is-outlined" onclick="addToCart(this, {{ $food->id }})" value="Add to Cart"/>
 
-                        <input type="button" class="button is-outlined is-success" value="Buy" onclick="if(confirm('Are you sure?')) buy(this, {{ $food->id }})"/>
+                    <input type="button" class="button is-outlined" onclick="addToCart(this, {{ $food->id }})"
+                        value="Add to Cart" />
+
+                    <input type="button" class="button is-outlined is-success" value="Buy"
+                        onclick="if(confirm('Are you sure?')) buy(this, {{ $food->id }})" />
+
+                    <input type="button" class="button is-outlined" value="Report" />
+
                     @else
-                        <a class="button is-outlined" href="{{ route("login") }}">Add to Cart</a>
 
-                        <a class="button is-outlined is-success" href="{{ route("login") }}">Buy</a>
+                    <a class="button is-outlined" href="{{ route("login") }}">Add to Cart</a>
+
+                    <a class="button is-outlined is-success" href="{{ route("login") }}">Buy</a>
+
+                    <a class="button is-outlined" href="{{ route("login") }}">Report</a>
+
                     @endif
                 </div>
             </div>
