@@ -1,0 +1,36 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito);html {
+  background-color: #E9EBEE;
+}
+
+#content {
+  margin-top: 1em;
+}
+
+.is-box {
+  background: white;
+  padding: 1.5em;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+p.subtitle.is-6.price {
+  font-size: 1.2rem;
+  color: orange;
+}
+
+.invalid-feedback strong {
+  color: #e3342f;
+}
+
+.mb-n {
+  margin-bottom: 1em;
+}
+
+.card.is-danger {
+  border: 1px solid red;
+  opacity: 0.5;
+}
+
