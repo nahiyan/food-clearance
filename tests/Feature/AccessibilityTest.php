@@ -40,7 +40,7 @@ class AccessibilityTest extends TestCase
             'email' => 'lorem.ipsum@test.com',
         ]);
 
-        // Logged in users should see the logout button and a hello
+        // Logged in users should see the logout button and a hello along with their name
         $this->actingAs($general)->get("/")->assertSee("Logout")->assertSee("Hello")->assertSee($general->name);
 
         // Should be able to access the cart
