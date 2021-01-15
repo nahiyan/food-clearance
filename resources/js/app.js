@@ -4,5 +4,5 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-require("./base.js")
+require('./bootstrap')
+require('./base.js')

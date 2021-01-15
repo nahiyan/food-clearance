@@ -37308,34 +37308,34 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
-var searchE = document.getElementById("search");
+var searchE = document.getElementById('search');
 
 if (searchE != null) {
-  searchE.addEventListener("input", function (e) {
+  searchE.addEventListener('input', function (e) {
     var value = e.target.value.trim();
-    var sr = document.getElementById("search-results");
+    var sr = document.getElementById('search-results');
 
     if (value.length > 0) {
       var xhr = new XMLHttpRequest();
 
       xhr.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          document.getElementById("search-results").classList.remove("hidden");
-          document.getElementById("results").classList.add("hidden");
+        if (this.readyState === 4 && this.status === 200) {
+          document.getElementById('search-results').classList.remove('hidden');
+          document.getElementById('results').classList.add('hidden');
           sr.innerHTML = this.responseText;
         }
       };
 
-      xhr.open("GET", "search/" + value, true);
+      xhr.open('GET', 'search/' + value, true);
       xhr.send();
     } else {
-      document.getElementById("search-results").classList.add("hidden");
-      document.getElementById("results").classList.remove("hidden");
+      document.getElementById('search-results').classList.add('hidden');
+      document.getElementById('results').classList.remove('hidden');
     }
   });
 }
 
-var modal = document.querySelector("#modal");
+var modal = document.querySelector('#modal');
 
 if (modal != null) {
   var modalCloseHandler = function modalCloseHandler(e) {
@@ -37345,6 +37345,20 @@ if (modal != null) {
 
   modal.querySelector('.modal-background').addEventListener('click', modalCloseHandler);
   modal.querySelector('.modal-close').addEventListener('click', modalCloseHandler);
+}
+
+var reportType = document.getElementById('report-type');
+
+if (reportType != null) {
+  reportType.onchange = function (e) {
+    if (reportType.value === 'food') {
+      document.getElementById('target-selection-food').classList.remove('hidden');
+      document.getElementById('target-selection-company').classList.add('hidden');
+    } else {
+      document.getElementById('target-selection-food').classList.add('hidden');
+      document.getElementById('target-selection-company').classList.remove('hidden');
+    }
+  };
 }
 
 /***/ }),
@@ -37412,8 +37426,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/nahiyanalamgir/code/food_clearance/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/nahiyanalamgir/code/food_clearance/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/nahiyanalamgir/code/food-clearance-original/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/nahiyanalamgir/code/food-clearance-original/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

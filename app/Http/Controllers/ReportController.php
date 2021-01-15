@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use App\Models\Food;
+use App\Models\Company;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -20,6 +24,7 @@ class ReportController extends Controller
             ->leftJoin("companies", "reports.company_id", "=", "companies.id")
             ->leftJoin("users", "reports.user_id", "=", "users.id")
             ->select("reports.*", "users.name as user_name", "foods.name as food_name", "companies.name as company_name")
+            ->orderBy("id", "desc")
             ->get();
 
         return view("admin.reports.index", ["entries" => $entries, "type" => Auth::user()->type]);
@@ -32,7 +37,7 @@ class ReportController extends Controller
      */
     public function create()
     {
-        return view("admin.reports.create", ["type" => Auth::user()->type]);
+        return view("reports.create", ["type" => Auth::user()->type, "companies" => Company::all(), "foods" => Food::all()]);
     }
 
     /**
@@ -45,10 +50,21 @@ class ReportController extends Controller
     {
         $request->validate([
             'type' => 'required',
-            'body' => 'required|max:255'
+            'body' => 'required|max:255',
+            'target-food' => 'required',
+            'target-company' => 'required'
         ]);
 
-        $entry = Report::create($request->all());
+        if ($request->type == 'food')
+            $request->merge(['food_id' => Food::findOrFail($request['target-food'])->id]);
+        else
+            $request->merge(['company_id' => Company::findOrFail($request['target-company'])->id]);
+
+        $request->merge(['user_id' => Auth::id()]);
+
+        Log::debug($request);
+
+        Report::create($request->all());
 
         return redirect("/")->with("success", "Reported successfully!");
     }

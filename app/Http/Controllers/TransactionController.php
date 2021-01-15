@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Transaction;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,12 +24,14 @@ class TransactionController extends Controller
                 ->leftJoin("users", "transactions.user_id", "=", "users.id")
                 ->where("companies.user_id", "=", Auth::user()->id)
                 ->select("transactions.*", "users.name as user_name", "foods.name as food_name")
-                ->get();
+                ->orderBy("id", "desc")
+                ->get();;
         } else {
             $entries = DB::table("transactions")
                 ->leftJoin("foods", "transactions.food_id", "=", "foods.id")
                 ->leftJoin("users", "transactions.user_id", "=", "users.id")
                 ->select("transactions.*", "users.name as user_name", "foods.name as food_name")
+                ->orderBy("id", "desc")
                 ->get();
         }
 

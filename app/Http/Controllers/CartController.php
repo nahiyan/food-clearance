@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\CartItem;
+use App\Models\CartItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +26,6 @@ class CartController extends Controller
             if ($entry->quantity > $entry->food->quantity) {
                 $can_checkout = false;
             }
-
         }
 
         return view("cart.index", ["entries" => $entries, "net_price" => $net_price, "can_checkout" => $can_checkout]);

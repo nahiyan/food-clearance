@@ -1,4 +1,4 @@
-@extends($type == "company" ? "layouts.company" : "layouts.admin")
+@extends("layouts.base")
 
 @section("content")
 <div class="is-box">
@@ -12,13 +12,41 @@
 
             <div>
                 <div class="select">
-                    <select name="type" required>
+                    <select name="type" id='report-type' required>
                         <option value="food">Food</option>
-                        <option value="food">Company</option>
+                        <option value="company">Company</option>
                     </select>
                 </div>
 
                 @error('type')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="Target" class="label">{{ __('Target') }}</label>
+
+            <div>
+                <div class="select" id='target-selection-food'>
+                    <select name="target-food">
+                        @foreach($foods as $food)
+                        <option value='{{ $food->id }}'>{{ $food->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="select hidden" id='target-selection-company'>
+                    <select name="target-company">
+                        @foreach($companies as $company)
+                        <option value='{{ $company->id }}'>{{ $company->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                @error('Target')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
